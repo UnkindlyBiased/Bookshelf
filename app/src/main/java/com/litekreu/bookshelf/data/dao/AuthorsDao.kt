@@ -18,6 +18,6 @@ interface AuthorsDao {
     @Query("SELECT * FROM Authors")
     fun getAllAuthors(): Flow<List<AuthorEntity>>
 
-    @Query("SELECT * FROM Authors JOIN Books ON AuthorId = :authorRefId")
+    @Query("SELECT * FROM Authors WHERE AuthorId = :authorRefId")
     fun getAuthorFromBook(authorRefId: Int): AuthorEntity
 }

@@ -4,11 +4,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.litekreu.bookshelf.domain.MainViewModel
+import com.litekreu.bookshelf.data.model.BookEntity
 
 @Composable
-fun MainScreen(viewModel: MainViewModel) {
+fun SelectedBookScreen(
+    book: BookEntity,
+    onClose: () -> Unit
+) {
     Box(modifier = Modifier.fillMaxSize()) {
-        BooksScreen(viewModel = viewModel)
+
     }
 }

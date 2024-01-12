@@ -18,6 +18,6 @@ interface BooksDao {
     @Query("SELECT * FROM Books")
     fun getAllBooks() : Flow<List<BookEntity>>
 
-    @Query("SELECT * FROM Books where BookName like :name")
-    fun getBooksByName(name: String): Flow<List<BookEntity>>
+    @Query("SELECT * FROM Books where BookName like '%' || :name || '%'")
+    fun searchBooksByName(name: String): Flow<List<BookEntity>>
 }

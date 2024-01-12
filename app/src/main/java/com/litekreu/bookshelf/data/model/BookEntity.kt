@@ -4,7 +4,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import java.time.Year
 
 @Entity(
     tableName = "Books",
@@ -32,7 +31,7 @@ data class BookEntity(
     val bookDescription: String,
 
     @ColumnInfo(name = "BookImpressions")
-    val bookImpressions: String,
+    val bookImpressions: String? = null,
 
     @ColumnInfo(name = "BookImageUrl")
     val bookImageUrl: String,
