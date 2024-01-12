@@ -4,14 +4,15 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import java.time.Year
 
 @Entity(
     tableName = "Books",
     foreignKeys = [
         ForeignKey(
             entity = AuthorEntity::class,
-            parentColumns = ["authorId"],
-            childColumns = ["authorRefId"],
+            parentColumns = ["AuthorId"],
+            childColumns = ["AuthorRefId"],
             onDelete = ForeignKey.CASCADE
         )
     ]
@@ -23,6 +24,9 @@ data class BookEntity(
 
     @ColumnInfo(name = "BookName")
     val bookName: String,
+
+    @ColumnInfo(name = "BookReleaseYear")
+    val bookReleaseYear: Int,
 
     @ColumnInfo(name = "BookDescription")
     val bookDescription: String,

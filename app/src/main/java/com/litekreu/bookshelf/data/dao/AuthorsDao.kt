@@ -10,14 +10,14 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface AuthorsDao {
     @Upsert
-    fun insertAuthor(author: AuthorEntity)
+    suspend fun insertAuthor(author: AuthorEntity)
 
     @Delete
-    fun deleteAuthor(author: AuthorEntity)
+    suspend fun deleteAuthor(author: AuthorEntity)
 
     @Query("SELECT * FROM Authors")
     fun getAllAuthors(): Flow<List<AuthorEntity>>
 
-    @Query("SELECT * FROM Authors JOIN Books ON AuthorRefId = AuthorId")
+    @Query("SELECT * FROM Authors JOIN Books ON AuthorId = :authorRefId")
     fun getAuthorFromBook(authorRefId: Int): AuthorEntity
 }

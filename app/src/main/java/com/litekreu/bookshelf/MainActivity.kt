@@ -9,6 +9,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.room.Room
 import com.litekreu.bookshelf.data.ShelfDatabase
+import com.litekreu.bookshelf.presentation.screens.MainScreen
 import com.litekreu.bookshelf.ui.theme.BookshelfTheme
 
 class MainActivity : ComponentActivity() {
@@ -17,6 +18,7 @@ class MainActivity : ComponentActivity() {
             applicationContext, ShelfDatabase::class.java, "ShelfDatabase"
         ).build()
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -25,7 +27,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-
+                    MainScreen()
                 }
             }
         }
