@@ -1,7 +1,6 @@
 package com.litekreu.bookshelf.ui.theme
 
 import androidx.compose.material3.Typography
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -22,29 +21,32 @@ val PlayfairDisplay = FontFamily(
     Font(playfairDisplay, provider)
 )
 
-// Set of Material typography styles to start with
+val googleFamily = FontFamily(
+    androidx.compose.ui.text.font.Font(R.font.google_regular, FontWeight.Normal),
+    androidx.compose.ui.text.font.Font(R.font.google_medium, FontWeight.Medium),
+    androidx.compose.ui.text.font.Font(R.font.google_bold, FontWeight.Bold),
+)
+
 val Typography = Typography(
     bodyLarge = TextStyle(
-        fontFamily = FontFamily.Default,
+        fontFamily = googleFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp
-    )
-    /* Other default text styles to override
+    ),
     titleLarge = TextStyle(
-        fontFamily = FontFamily.Default,
+        fontFamily = googleFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 22.sp,
         lineHeight = 28.sp,
         letterSpacing = 0.sp
     ),
     labelSmall = TextStyle(
-        fontFamily = FontFamily.Default,
+        fontFamily = googleFamily,
         fontWeight = FontWeight.Medium,
         fontSize = 11.sp,
         lineHeight = 16.sp,
         letterSpacing = 0.5.sp
     )
-    */
 )

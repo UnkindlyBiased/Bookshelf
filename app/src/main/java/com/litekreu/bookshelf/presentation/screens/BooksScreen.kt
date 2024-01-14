@@ -25,6 +25,7 @@ import com.litekreu.bookshelf.domain.MainViewModel
 import com.litekreu.bookshelf.domain.event.BookEvent
 import com.litekreu.bookshelf.presentation.elements.BookItem
 import com.litekreu.bookshelf.presentation.elements.ShelfTopBar
+import com.litekreu.bookshelf.ui.theme.googleFamily
 
 @Composable
 fun BooksScreen(
@@ -36,7 +37,7 @@ fun BooksScreen(
     
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = { viewModel.insertBook() }) {
+            FloatingActionButton(onClick = { onEvent(BookEvent.AddBook("title", "desc", 1)) }) {
                 Row(modifier = Modifier.padding(12.dp)) {
                     Icon(
                         imageVector = Icons.Default.Add,
@@ -44,6 +45,7 @@ fun BooksScreen(
                     )
                     Text(
                         text = stringResource(R.string.add_book),
+                        fontFamily = googleFamily,
                         modifier = Modifier
                             .align(Alignment.CenterVertically)
                             .padding(start = 8.dp)

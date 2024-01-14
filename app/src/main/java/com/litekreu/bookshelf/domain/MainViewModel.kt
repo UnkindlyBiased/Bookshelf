@@ -16,40 +16,29 @@ class MainViewModel(
     private val database: ShelfDatabase
 ) : ViewModel() {
     val booksList = database.booksDao.getAllBooks()
-    val authorsList = database.authorsDao.getAllAuthors()
 
     private val _currentBook = MutableStateFlow(CurrentBookState())
     val currentBook = _currentBook.asStateFlow()
 
-    fun insertBook() {
-        viewModelScope.launch {
-            try {
-                database.booksDao.upsertBook(BookEntity(
-                    bookName = "Ферма тварин",
-                    bookReleaseYear = 1945,
-                    bookDescription = "",
-                    bookImageUrl = "https://m.media-amazon.com/images/I/71JUJ6pGoIL._AC_UF1000,1000_QL80_.jpg",
-                    authorRefId = 1
-                ))
-            } catch (e: Exception) {
-                insertAuthor()
-            }
-        }
-    }
-
-    private fun insertAuthor() {
-        viewModelScope.launch {
-            database.authorsDao.insertAuthor(AuthorEntity(
-                authorName = "Джордж Орвелл",
-                authorImageUrl = "https://hips.hearstapps.com/hmg-prod/images/george-orwell.jpg?crop=1xw:1.0xh;center,top&resize=640:*"
-            ))
-        }
-    }
-
     fun onBookEvent(event: BookEvent) {
         when(event) {
             is BookEvent.AddBook -> {
-
+                viewModelScope.launch {
+                    try {
+                        database.booksDao.upsertBook(BookEntity(
+                            bookName = "Ферма тварин",
+                            bookReleaseYear = 1945,
+                            bookDescription = "",
+                            bookImageUrl = "https://m.media-amazon.com/images/I/71JUJ6pGoIL._AC_UF1000,1000_QL80_.jpg",
+                            authorRefId = 1
+                        ))
+                    } catch (e: Exception) {
+                        database.authorsDao.insertAuthor(AuthorEntity(
+                            authorName = "Джордж Орвелл",
+                            authorImageUrl = "https://hips.hearstapps.com/hmg-prod/images/george-orwell.jpg?crop=1xw:1.0xh;center,top&resize=640:*"
+                        ))
+                    }
+                }
             }
             is BookEvent.DeleteBook -> {
                 viewModelScope.launch {

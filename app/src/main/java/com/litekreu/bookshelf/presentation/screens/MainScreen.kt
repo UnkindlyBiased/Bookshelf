@@ -30,14 +30,7 @@ fun MainScreen(
             }
         }
         composable(route = "currentBook") {
-            val currentBookState by viewModel.currentBook.collectAsStateWithLifecycle()
-
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                Text(text = currentBookState.currentBook?.bookName ?: "Null")
-            }
+            CurrentBookScreen(viewModel = viewModel) { navController.popBackStack() }
         }
     }
 }
