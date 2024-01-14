@@ -22,11 +22,16 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.litekreu.bookshelf.R
 import com.litekreu.bookshelf.domain.MainViewModel
+import com.litekreu.bookshelf.domain.event.BookEvent
 import com.litekreu.bookshelf.presentation.elements.BookItem
 import com.litekreu.bookshelf.presentation.elements.ShelfTopBar
 
 @Composable
-fun BooksScreen(viewModel: MainViewModel) {
+fun BooksScreen(
+    viewModel: MainViewModel,
+    onEvent: (BookEvent) -> Unit,
+    onOpen: () -> Unit
+) {
     val booksList by viewModel.booksList.collectAsStateWithLifecycle(initialValue = emptyList())
     
     Scaffold(
@@ -56,8 +61,11 @@ fun BooksScreen(viewModel: MainViewModel) {
             items(booksList) { book ->
                 BookItem(
                     book = book,
-                    onDelete = {  },
-                    onOpen = {  }
+                    onDelete = { onEvent(BookEvent.DeleteBook(book)) },
+                    onOpen = {
+                        onEvent(BookEvent.OpenBook(book))
+                        onOpen()
+                    }
                 )
             }
         }
