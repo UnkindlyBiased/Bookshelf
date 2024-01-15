@@ -30,6 +30,7 @@ data class BookEntity(
     @ColumnInfo(name = "BookDescription")
     val bookDescription: String,
 
+    // TODO: remove field, convert to using separate table (like comments to the book)
     @ColumnInfo(name = "BookImpressions")
     val bookImpressions: String? = null,
 

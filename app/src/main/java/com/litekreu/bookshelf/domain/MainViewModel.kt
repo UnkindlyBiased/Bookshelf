@@ -25,7 +25,7 @@ class MainViewModel(
             is BookEvent.AddBook -> {
                 viewModelScope.launch {
                     try {
-                        database.booksDao.upsertBook(BookEntity(
+                        database.booksDao.insertBook(BookEntity(
                             bookName = "Ферма тварин",
                             bookReleaseYear = 1945,
                             bookDescription = "",

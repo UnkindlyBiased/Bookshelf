@@ -2,15 +2,19 @@ package com.litekreu.bookshelf.data.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
+import androidx.room.Insert
 import androidx.room.Query
-import androidx.room.Upsert
+import androidx.room.Update
 import com.litekreu.bookshelf.data.model.BookEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface BooksDao {
-    @Upsert
-    suspend fun upsertBook(book: BookEntity)
+    @Insert
+    suspend fun insertBook(book: BookEntity)
+
+    @Update
+    suspend fun updateBook(book: BookEntity)
 
     @Delete
     suspend fun deleteBook(book: BookEntity)

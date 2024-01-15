@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -42,8 +43,20 @@ fun CurrentBookScreen(
                 text = it.bookName,
                 fontSize = 18.sp,
                 color = rowColor,
-                modifier = Modifier.align(Alignment.CenterVertically)
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .weight(1f)
             ) }
+            IconButton(
+                onClick = { /*TODO*/ },
+                modifier = Modifier.align(Alignment.CenterVertically).padding(end = 8.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Edit,
+                    contentDescription = "Edit",
+                    tint = rowColor
+                )
+            }
         }
         Row(modifier = Modifier.padding(top = 16.dp, start = 24.dp)) {
             currentBookState.currentBook?.let {
