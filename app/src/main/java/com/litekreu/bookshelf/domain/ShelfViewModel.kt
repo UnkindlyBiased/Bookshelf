@@ -5,54 +5,78 @@ import androidx.lifecycle.viewModelScope
 import com.litekreu.bookshelf.data.ShelfDatabase
 import com.litekreu.bookshelf.data.model.AuthorEntity
 import com.litekreu.bookshelf.data.model.BookEntity
+import com.litekreu.bookshelf.data.model.CommentEntity
 import com.litekreu.bookshelf.domain.event.BookEvent
+import com.litekreu.bookshelf.domain.event.CommentEvent
 import com.litekreu.bookshelf.domain.state.CurrentBookState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ShelfViewModel @Inject constructor(
-    private val shelfDatabase: ShelfDatabase
+    private val database: ShelfDatabase,
+    private val defaultAuthor: AuthorEntity,
+    private val defaultBook: BookEntity,
+    private val defaultComment: CommentEntity
 ) : ViewModel() {
-    val booksList = shelfDatabase.booksDao.getAllBooks()
+    val booksList = database.booksDao.getAllBooks()
+    private var commentsList = database.commentsDao.getAllComments().stateIn(
+        viewModelScope, SharingStarted.WhileSubscribed(), emptyList()
+    )
 
     private val _currentBook = MutableStateFlow(CurrentBookState())
-    val currentBook = _currentBook.asStateFlow()
+    val currentBook = combine(_currentBook, commentsList) { state, comments ->
+        state.copy(
+            currentComments = comments.filter { comment ->
+                comment.bookRefId == state.currentBook?.id
+            }
+        )
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     fun onBookEvent(event: BookEvent) {
         when(event) {
             is BookEvent.AddBook -> {
                 viewModelScope.launch {
                     try {
-                        shelfDatabase.booksDao.insertBook(BookEntity(
-                            bookName = "Ферма тварин",
-                            bookReleaseYear = 1945,
-                            bookDescription = "",
-                            bookImageUrl = "https://m.media-amazon.com/images/I/71JUJ6pGoIL._AC_UF1000,1000_QL80_.jpg",
-                            authorRefId = 1
-                        ))
+                        database.booksDao.insertBook(defaultBook)
                     } catch (e: Exception) {
-                        shelfDatabase.authorsDao.insertAuthor(AuthorEntity(
-                            authorName = "Джордж Орвелл",
-                            authorImageUrl = "https://hips.hearstapps.com/hmg-prod/images/george-orwell.jpg?crop=1xw:1.0xh;center,top&resize=640:*"
-                        ))
+                        database.authorsDao.insertAuthor(defaultAuthor)
                     }
                 }
             }
             is BookEvent.DeleteBook -> {
                 viewModelScope.launch {
-                    shelfDatabase.booksDao.deleteBook(event.book)
+                    database.booksDao.deleteBook(event.book)
                 }
             }
             is BookEvent.OpenBook -> {
-                viewModelScope.launch {
-                    _currentBook.update {
-                        it.copy(currentBook = event.book)
+                viewModelScope.launch(Dispatchers.IO) {
+                    _currentBook.update { bookState ->
+                        bookState.copy(
+                            currentBook = event.book
+                        )
                     }
+                }
+            }
+        }
+    }
+    fun onCommentsEvent(event: CommentEvent) {
+        when(event) {
+            is CommentEvent.AddComment -> {
+                viewModelScope.launch {
+                    database.commentsDao.insertComment(defaultComment)
+                }
+            }
+            is CommentEvent.DeleteComment -> {
+                viewModelScope.launch {
+                    database.commentsDao.deleteComment(event.comment)
                 }
             }
         }

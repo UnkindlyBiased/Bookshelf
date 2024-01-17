@@ -3,8 +3,10 @@ package com.litekreu.bookshelf.presentation.screens
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -27,7 +29,11 @@ fun MainScreen(
             }
         }
         composable(route = "currentBook") {
-            CurrentBookScreen(viewModel = viewModel) { navController.popBackStack() }
+            CurrentBookScreen(
+                viewModel = viewModel,
+                onComment = viewModel::onCommentsEvent,
+                onBack = { navController.popBackStack() }
+            )
         }
     }
 }
