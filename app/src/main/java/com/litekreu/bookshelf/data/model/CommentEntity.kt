@@ -14,5 +14,5 @@ data class CommentEntity(
     val commentText: String,
 
     @ColumnInfo(name = "BookRefId")
-    val bookRefId: Int
+    val bookRefId: Int? = null
 )

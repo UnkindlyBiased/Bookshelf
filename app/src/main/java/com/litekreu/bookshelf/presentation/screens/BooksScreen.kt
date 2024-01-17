@@ -14,27 +14,23 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.litekreu.bookshelf.R
-import com.litekreu.bookshelf.domain.ShelfViewModel
 import com.litekreu.bookshelf.domain.event.BookEvent
+import com.litekreu.bookshelf.domain.state.BooksState
 import com.litekreu.bookshelf.presentation.elements.BookItem
 import com.litekreu.bookshelf.presentation.elements.ShelfTopBar
 import com.litekreu.bookshelf.ui.theme.googleFamily
 
 @Composable
 fun BooksScreen(
-    viewModel: ShelfViewModel,
+    state: BooksState,
     onEvent: (BookEvent) -> Unit,
     onOpen: () -> Unit
 ) {
-    val booksList by viewModel.booksList.collectAsStateWithLifecycle(initialValue = emptyList())
-    
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = { onEvent(BookEvent.AddBook("title", "desc", 1)) }) {
@@ -60,7 +56,7 @@ fun BooksScreen(
             verticalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier.fillMaxSize()
         ) {
-            items(booksList) { book ->
+            items(state.books) { book ->
                 BookItem(
                     book = book,
                     onDelete = { onEvent(BookEvent.DeleteBook(book)) },

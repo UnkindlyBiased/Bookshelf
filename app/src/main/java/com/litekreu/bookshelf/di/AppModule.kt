@@ -44,6 +44,6 @@ object AppModule {
     @Provides
     fun provideDefaultComment(): CommentEntity = CommentEntity(
         commentText = "Дефолтний комент",
-        bookRefId = 27
+        bookRefId = 0
     )
 }

@@ -1,6 +1,6 @@
 package com.litekreu.bookshelf.presentation.elements
 
-import android.annotation.SuppressLint
+import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,8 +18,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.litekreu.bookshelf.data.model.BookEntity
@@ -64,16 +64,20 @@ fun BookItem(
     }
 }
 
-@SuppressLint("NewApi")
-@Preview
 @Composable
-fun BookPreview() {
-    BookItem(book = BookEntity(
-        bookName = "Ферма тварин",
-        bookReleaseYear = 1945,
-        bookDescription = "Чудова книга",
-        bookImpressions = "Книга чудова",
-        bookImageUrl = "https://example.com/image.url",
-        authorRefId = 1
-    ), onDelete = {  }, onOpen = {  })
+fun InfoRow(
+    @StringRes res: Int,
+    info: String?,
+    modifier: Modifier = Modifier
+) {
+    Row {
+        Text(
+            text = stringResource(res) + " ",
+            fontWeight = FontWeight.Bold
+        )
+        Text(
+            text = "$info",
+            modifier = modifier
+        )
+    }
 }

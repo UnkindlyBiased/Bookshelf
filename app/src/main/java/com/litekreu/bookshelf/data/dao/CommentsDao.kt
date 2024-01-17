@@ -17,7 +17,4 @@ interface CommentsDao {
 
     @Query("SELECT * FROM Comments")
     fun getAllComments(): Flow<List<CommentEntity>>
-
-//    @Query("SELECT * FROM Comments WHERE BookRefId = :bookId")
-//    fun getBookComments(bookId: Int?): List<CommentEntity>
 }
