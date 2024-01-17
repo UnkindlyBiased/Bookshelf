@@ -21,7 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.litekreu.bookshelf.R
-import com.litekreu.bookshelf.domain.MainViewModel
+import com.litekreu.bookshelf.domain.ShelfViewModel
 import com.litekreu.bookshelf.domain.event.BookEvent
 import com.litekreu.bookshelf.presentation.elements.BookItem
 import com.litekreu.bookshelf.presentation.elements.ShelfTopBar
@@ -29,7 +29,7 @@ import com.litekreu.bookshelf.ui.theme.googleFamily
 
 @Composable
 fun BooksScreen(
-    viewModel: MainViewModel,
+    viewModel: ShelfViewModel,
     onEvent: (BookEvent) -> Unit,
     onOpen: () -> Unit
 ) {

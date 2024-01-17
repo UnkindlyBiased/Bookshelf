@@ -17,6 +17,5 @@ import com.litekreu.bookshelf.data.model.BookEntity
 )
 abstract class ShelfDatabase : RoomDatabase() {
     abstract val authorsDao: AuthorsDao
-
     abstract val booksDao: BooksDao
 }

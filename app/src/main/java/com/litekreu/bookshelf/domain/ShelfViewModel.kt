@@ -7,15 +7,18 @@ import com.litekreu.bookshelf.data.model.AuthorEntity
 import com.litekreu.bookshelf.data.model.BookEntity
 import com.litekreu.bookshelf.domain.event.BookEvent
 import com.litekreu.bookshelf.domain.state.CurrentBookState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MainViewModel(
-    private val database: ShelfDatabase
+@HiltViewModel
+class ShelfViewModel @Inject constructor(
+    private val shelfDatabase: ShelfDatabase
 ) : ViewModel() {
-    val booksList = database.booksDao.getAllBooks()
+    val booksList = shelfDatabase.booksDao.getAllBooks()
 
     private val _currentBook = MutableStateFlow(CurrentBookState())
     val currentBook = _currentBook.asStateFlow()
@@ -25,7 +28,7 @@ class MainViewModel(
             is BookEvent.AddBook -> {
                 viewModelScope.launch {
                     try {
-                        database.booksDao.insertBook(BookEntity(
+                        shelfDatabase.booksDao.insertBook(BookEntity(
                             bookName = "Ферма тварин",
                             bookReleaseYear = 1945,
                             bookDescription = "",
@@ -33,7 +36,7 @@ class MainViewModel(
                             authorRefId = 1
                         ))
                     } catch (e: Exception) {
-                        database.authorsDao.insertAuthor(AuthorEntity(
+                        shelfDatabase.authorsDao.insertAuthor(AuthorEntity(
                             authorName = "Джордж Орвелл",
                             authorImageUrl = "https://hips.hearstapps.com/hmg-prod/images/george-orwell.jpg?crop=1xw:1.0xh;center,top&resize=640:*"
                         ))
@@ -42,7 +45,7 @@ class MainViewModel(
             }
             is BookEvent.DeleteBook -> {
                 viewModelScope.launch {
-                    database.booksDao.deleteBook(event.book)
+                    shelfDatabase.booksDao.deleteBook(event.book)
                 }
             }
             is BookEvent.OpenBook -> {

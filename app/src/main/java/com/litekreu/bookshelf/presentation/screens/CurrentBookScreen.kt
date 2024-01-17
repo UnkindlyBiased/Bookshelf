@@ -20,11 +20,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import com.litekreu.bookshelf.domain.MainViewModel
+import com.litekreu.bookshelf.domain.ShelfViewModel
 
 @Composable
 fun CurrentBookScreen(
-    viewModel: MainViewModel,
+    viewModel: ShelfViewModel,
     onBack: () -> Unit
 ) {
     val currentBookState by viewModel.currentBook.collectAsStateWithLifecycle()
