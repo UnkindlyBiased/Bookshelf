@@ -13,12 +13,8 @@ import com.litekreu.bookshelf.data.model.CommentEntity
 @Database(
     entities = [AuthorEntity::class, BookEntity::class, CommentEntity::class],
     version = 4,
-    autoMigrations = [
-        AutoMigration(from = 1, to = 2),
-        AutoMigration(from = 2, to = 3),
-        AutoMigration(from = 3, to = 4)
-    ]
 )
+
 abstract class ShelfDatabase : RoomDatabase() {
     abstract val authorsDao: AuthorsDao
     abstract val booksDao: BooksDao
