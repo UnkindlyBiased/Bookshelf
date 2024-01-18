@@ -26,8 +26,7 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val database: ShelfDatabase,
     private val defaultAuthor: AuthorEntity,
-    private val defaultBook: BookEntity,
-    private val defaultComment: CommentEntity
+    private val defaultBook: BookEntity
 ) : ViewModel() {
 
     private val _booksState = MutableStateFlow(BooksState())
@@ -56,7 +55,7 @@ class MainViewModel @Inject constructor(
                 book.authorRefId == state.currentAuthor?.authorId
             }
         )
-    }
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(TIMEOUT), null)
 
     private val _currentBookState = MutableStateFlow(CurrentBookState())
     val currentBookState = combine(_currentBookState, commentsList, authorsList) { state, comments, authors ->
@@ -66,9 +65,9 @@ class MainViewModel @Inject constructor(
             },
             currentComments = comments.filter { comment ->
                 comment.bookRefId == state.currentBook?.id
-            }
+            }.reversed()
         )
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(TIMEOUT), null)
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(TIMEOUT), CurrentBookState())
 
     fun onAuthorsEvent(event: AuthorEvent) {
         when(event) {
@@ -120,7 +119,10 @@ class MainViewModel @Inject constructor(
         when(event) {
             is CommentEvent.AddComment -> {
                 viewModelScope.launch {
-                    database.commentsDao.insertComment(defaultComment.copy(bookRefId = currentBookState.value?.currentBook?.id))
+                    database.commentsDao.insertComment(CommentEntity(
+                        commentText = event.commentText,
+                        bookRefId = currentBookState.value.currentBook?.id
+                    ))
                 }
             }
             is CommentEvent.DeleteComment -> {

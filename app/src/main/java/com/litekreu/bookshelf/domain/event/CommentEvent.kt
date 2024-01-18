@@ -4,7 +4,8 @@ import com.litekreu.bookshelf.data.model.CommentEntity
 
 sealed interface CommentEvent {
     data class AddComment(
-        val test: Int? = null
+        val commentText: String,
+        val bookRefId: Int? = null
     ) : CommentEvent
     data class DeleteComment(val comment: CommentEntity): CommentEvent
 }

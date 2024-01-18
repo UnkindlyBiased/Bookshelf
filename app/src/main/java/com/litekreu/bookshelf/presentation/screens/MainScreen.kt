@@ -9,7 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.litekreu.bookshelf.domain.MainViewModel
-import com.litekreu.bookshelf.domain.NavGraph
+import com.litekreu.bookshelf.util.NavGraph
 
 @Composable
 fun MainScreen(
@@ -32,10 +32,12 @@ fun MainScreen(
             CurrentBookScreen(
                 state = bookState,
                 onComment = viewModel::onCommentsEvent,
-                onBack = { navController.popBackStack() }
+                onBack = { navController.popBackStack() },
+                onOpen = { navController.navigate(NavGraph.CurrentAuthor) }
             )
         }
         composable(route = NavGraph.CurrentAuthor) {
+
         }
     }
 }

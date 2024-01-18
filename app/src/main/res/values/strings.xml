@@ -4,4 +4,6 @@
     <string name="add_comment">Додати коментар</string>
     <string name="release_year">Рік видання:</string>
     <string name="author">Автор:</string>
+    <string name="book_desc">Опис книги</string>
+    <string name="comments">Коментарі</string>
 </resources>

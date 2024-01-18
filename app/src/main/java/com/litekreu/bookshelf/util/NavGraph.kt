@@ -1,4 +1,4 @@
-package com.litekreu.bookshelf.domain
+package com.litekreu.bookshelf.util
 
 object NavGraph {
     const val Books = "books"

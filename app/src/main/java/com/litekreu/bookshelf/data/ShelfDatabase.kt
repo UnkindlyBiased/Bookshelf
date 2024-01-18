@@ -1,6 +1,5 @@
 package com.litekreu.bookshelf.data
 
-import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.litekreu.bookshelf.data.dao.AuthorsDao
