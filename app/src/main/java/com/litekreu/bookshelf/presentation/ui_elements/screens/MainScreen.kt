@@ -1,4 +1,4 @@
-package com.litekreu.bookshelf.presentation.screens
+package com.litekreu.bookshelf.presentation.ui_elements.screens
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -23,7 +23,17 @@ fun MainScreen(
             BooksScreen(
                 state = booksState,
                 onEvent = viewModel::onBookEvent,
-                onOpen = { navController.navigate(NavGraph.CurrentBook) }
+                onOpen = { navController.navigate(NavGraph.CurrentBook) },
+                onNavigateToAddition = { navController.navigate(NavGraph.AddBook) }
+            )
+        }
+        composable(route = NavGraph.AddBook) {
+            val addBookState by viewModel.addBookState.collectAsStateWithLifecycle()
+
+            AddBookScreen(
+                state = addBookState,
+                onBook = viewModel::onBookEvent,
+                onBack = { navController.popBackStack() }
             )
         }
         composable(route = NavGraph.CurrentBook) {

@@ -1,4 +1,4 @@
-package com.litekreu.bookshelf.presentation.screens
+package com.litekreu.bookshelf.presentation.ui_elements.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -21,19 +21,20 @@ import androidx.compose.ui.unit.dp
 import com.litekreu.bookshelf.R
 import com.litekreu.bookshelf.domain.event.BookEvent
 import com.litekreu.bookshelf.domain.state.BooksState
-import com.litekreu.bookshelf.presentation.elements.BookItem
-import com.litekreu.bookshelf.presentation.elements.ShelfTopBar
+import com.litekreu.bookshelf.presentation.ui_elements.elements.BookItem
+import com.litekreu.bookshelf.presentation.ui_elements.elements.ShelfTopBar
 import com.litekreu.bookshelf.ui.theme.googleFamily
 
 @Composable
 fun BooksScreen(
     state: BooksState,
     onEvent: (BookEvent) -> Unit,
-    onOpen: () -> Unit
+    onOpen: () -> Unit,
+    onNavigateToAddition: () -> Unit
 ) {
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = { onEvent(BookEvent.AddBook("title", "desc", 1)) }) {
+            FloatingActionButton(onClick = { onNavigateToAddition() }) {
                 Row(modifier = Modifier.padding(12.dp)) {
                     Icon(
                         imageVector = Icons.Default.Add,

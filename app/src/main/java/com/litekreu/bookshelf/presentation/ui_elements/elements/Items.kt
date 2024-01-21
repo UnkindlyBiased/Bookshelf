@@ -1,4 +1,4 @@
-package com.litekreu.bookshelf.presentation.elements
+package com.litekreu.bookshelf.presentation.ui_elements.elements
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
@@ -32,10 +33,38 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.litekreu.bookshelf.R
 import com.litekreu.bookshelf.data.model.BookEntity
 import com.litekreu.bookshelf.data.model.CommentEntity
 import com.litekreu.bookshelf.ui.theme.BookGray
+import com.litekreu.bookshelf.ui.theme.googleFamily
+
+@Composable
+fun ScreenTitleRow(
+    title: String,
+    onBack: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(modifier = modifier.padding(top = 8.dp)) {
+        IconButton(onClick = { onBack() }) {
+            Icon(
+                imageVector = Icons.Default.ArrowBack,
+                tint = BookGray,
+                contentDescription = null
+            )
+        }
+        Text(
+            text = title,
+            fontSize = 18.sp,
+            color = BookGray,
+            modifier = Modifier
+                .align(Alignment.CenterVertically)
+                .weight(1f)
+        )
+    }
+}
 
 @Composable
 fun BookItem(
@@ -102,7 +131,7 @@ fun CommentTextField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    padding: PaddingValues
+    padding: PaddingValues = PaddingValues(0.dp)
 ) {
     Box(modifier = Modifier.padding(padding)) {
         BasicTextField(
@@ -126,11 +155,40 @@ fun CommentTextField(
                     }
                 }
             },
+            singleLine = true,
             modifier = modifier
-                .fillMaxWidth()
+                .fillMaxWidth(0.85f)
                 .clip(RoundedCornerShape(20))
                 .padding(4.dp)
                 .height(48.dp)
+        )
+    }
+}
+
+@Composable
+fun CommentsTitle(
+    amount: Int?,
+    onClick: () -> Unit
+) {
+    Row(modifier = Modifier
+        .padding(top = 18.dp)
+        .clickable {
+            onClick()
+        }) {
+        Text(
+            text = stringResource(R.string.comments),
+            fontFamily = googleFamily,
+            style = MaterialTheme.typography.titleLarge
+        )
+        Text(
+            text = " · ",
+            style = MaterialTheme.typography.titleLarge,
+            color = BookGray
+        )
+        Text(
+            text = "$amount",
+            style = MaterialTheme.typography.titleLarge,
+            color = BookGray
         )
     }
 }

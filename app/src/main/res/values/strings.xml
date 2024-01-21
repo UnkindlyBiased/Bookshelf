@@ -2,8 +2,12 @@
     <string name="app_name">Bookshelf</string>
     <string name="add_book">Додати книгу</string>
     <string name="add_comment">Додати коментар</string>
-    <string name="release_year">Рік видання:</string>
     <string name="author">Автор:</string>
+    <string name="book_name">Назва книги</string>
     <string name="book_desc">Опис книги</string>
+    <string name="book_progress">Прогрес читання книги</string>
+    <string name="book_image_url">Посилання на зображення книги</string>
+    <string name="book_release_year">Рік видання</string>
     <string name="comments">Коментарі</string>
+    <string name="beta_comments_box">тиць тут, щоб побачити коментарі</string>
 </resources>

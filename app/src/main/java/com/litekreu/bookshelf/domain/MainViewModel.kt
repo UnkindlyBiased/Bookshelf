@@ -9,6 +9,7 @@ import com.litekreu.bookshelf.data.model.CommentEntity
 import com.litekreu.bookshelf.domain.event.AuthorEvent
 import com.litekreu.bookshelf.domain.event.BookEvent
 import com.litekreu.bookshelf.domain.event.CommentEvent
+import com.litekreu.bookshelf.domain.state.AddBookState
 import com.litekreu.bookshelf.domain.state.BooksState
 import com.litekreu.bookshelf.domain.state.CurrentAuthorState
 import com.litekreu.bookshelf.domain.state.CurrentBookState
@@ -16,6 +17,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -25,8 +27,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val database: ShelfDatabase,
-    private val defaultAuthor: AuthorEntity,
-    private val defaultBook: BookEntity
+    private val defaultAuthor: AuthorEntity
 ) : ViewModel() {
 
     private val _booksState = MutableStateFlow(BooksState())
@@ -47,6 +48,9 @@ class MainViewModel @Inject constructor(
     private val commentsList = database.commentsDao.getAllComments().stateIn(
         viewModelScope, SharingStarted.WhileSubscribed(TIMEOUT), emptyList()
     )
+
+    private val _addBookState = MutableStateFlow(AddBookState())
+    val addBookState = _addBookState.asStateFlow()
 
     private val _currentAuthorState = MutableStateFlow(CurrentAuthorState())
     val currentAuthorState = _currentAuthorState.combine(booksList) { state, books ->
@@ -93,7 +97,13 @@ class MainViewModel @Inject constructor(
             is BookEvent.AddBook -> {
                 viewModelScope.launch {
                     try {
-                        database.booksDao.insertBook(defaultBook)
+                        database.booksDao.insertBook(BookEntity(
+                            bookName = event.title,
+                            bookDescription = event.description,
+                            bookReleaseYear = event.releaseYear,
+                            bookImageUrl = event.imageLink,
+                            authorRefId = event.authorId
+                        ))
                     } catch (e: Exception) {
                         database.authorsDao.insertAuthor(defaultAuthor)
                     }
@@ -120,7 +130,7 @@ class MainViewModel @Inject constructor(
             is CommentEvent.AddComment -> {
                 viewModelScope.launch {
                     database.commentsDao.insertComment(CommentEntity(
-                        commentText = event.commentText,
+                        commentText = event.commentText.replace("\\s+".toRegex(), " "),
                         bookRefId = currentBookState.value.currentBook?.id
                     ))
                 }
