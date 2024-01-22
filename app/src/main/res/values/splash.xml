@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Bookshelf.MySplash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">#FFFBFF</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/white_theme_text</item>
+        <item name="postSplashScreenTheme">@style/Theme.Bookshelf</item>
+    </style>
+</resources>
