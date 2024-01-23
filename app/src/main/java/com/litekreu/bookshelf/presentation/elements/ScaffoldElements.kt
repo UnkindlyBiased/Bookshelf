@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.litekreu.bookshelf.presentation.ui_elements.elements
+package com.litekreu.bookshelf.presentation.elements
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth

@@ -1,4 +1,4 @@
-package com.litekreu.bookshelf.presentation.ui_elements.screens
+package com.litekreu.bookshelf.presentation.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.litekreu.bookshelf.R
 import com.litekreu.bookshelf.domain.event.BookEvent
 import com.litekreu.bookshelf.domain.state.AddBookState
-import com.litekreu.bookshelf.presentation.ui_elements.elements.ScreenTitleRow
+import com.litekreu.bookshelf.presentation.elements.ScreenTitleRow
 import kotlinx.coroutines.launch
 
 @Composable

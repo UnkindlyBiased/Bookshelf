@@ -69,7 +69,7 @@ class MainViewModel @Inject constructor(
             },
             currentComments = comments.filter { comment ->
                 comment.bookRefId == state.currentBook?.id
-            }.reversed()
+            }.sortedBy { it.commentProgress }.reversed()
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(TIMEOUT), CurrentBookState())
 

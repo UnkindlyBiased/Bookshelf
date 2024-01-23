@@ -1,5 +1,6 @@
 package com.litekreu.bookshelf.data
 
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.litekreu.bookshelf.data.dao.AuthorsDao
@@ -11,7 +12,7 @@ import com.litekreu.bookshelf.data.model.CommentEntity
 
 @Database(
     entities = [AuthorEntity::class, BookEntity::class, CommentEntity::class],
-    version = 4,
+    version = 5,
 )
 
 abstract class ShelfDatabase : RoomDatabase() {

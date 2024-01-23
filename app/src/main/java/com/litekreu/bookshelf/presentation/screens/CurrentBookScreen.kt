@@ -1,4 +1,4 @@
-package com.litekreu.bookshelf.presentation.ui_elements.screens
+package com.litekreu.bookshelf.presentation.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -46,12 +46,11 @@ import coil.compose.AsyncImage
 import com.litekreu.bookshelf.R
 import com.litekreu.bookshelf.domain.event.CommentEvent
 import com.litekreu.bookshelf.domain.state.CurrentBookState
-import com.litekreu.bookshelf.presentation.ui_elements.elements.CommentCard
-import com.litekreu.bookshelf.presentation.ui_elements.elements.CommentTextField
-import com.litekreu.bookshelf.presentation.ui_elements.elements.CommentsTitle
-import com.litekreu.bookshelf.presentation.ui_elements.elements.InfoRow
-import com.litekreu.bookshelf.presentation.ui_elements.elements.ScreenTitleRow
-import com.litekreu.bookshelf.ui.theme.BookGray
+import com.litekreu.bookshelf.presentation.elements.CommentCard
+import com.litekreu.bookshelf.presentation.elements.CommentTextField
+import com.litekreu.bookshelf.presentation.elements.CommentsTitle
+import com.litekreu.bookshelf.presentation.elements.InfoRow
+import com.litekreu.bookshelf.presentation.elements.ScreenTitleRow
 import com.litekreu.bookshelf.ui.theme.googleFamily
 import kotlinx.coroutines.launch
 
@@ -175,7 +174,7 @@ fun CurrentBookScreen(
                     Icon(
                         imageVector = Icons.Default.Edit,
                         contentDescription = "Edit",
-                        tint = BookGray
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer
                     )
                 }
             }
@@ -196,12 +195,13 @@ fun CurrentBookScreen(
                         Text(
                             text = it.bookName,
                             fontSize = 28.sp,
-                            fontWeight = FontWeight.Medium
+                            fontWeight = FontWeight.Medium,
+                            color = MaterialTheme.colorScheme.primary
                         )
                         Column(modifier = Modifier.padding(top = 14.dp)) {
-                            InfoRow(res = R.string.book_release_year, info = "${it.bookReleaseYear}")
+                            InfoRow(res = stringResource(R.string.book_release_year) + ":", info = "${it.bookReleaseYear}")
                             InfoRow(
-                                res = R.string.author,
+                                res = stringResource(R.string.author),
                                 info = state.bookAuthor?.authorName,
                                 isDecorated = true,
                                 modifier = Modifier.clickable {
@@ -218,11 +218,13 @@ fun CurrentBookScreen(
                 Text(
                     text = stringResource(R.string.book_desc),
                     fontFamily = googleFamily,
-                    style = MaterialTheme.typography.titleLarge
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.secondary
                 )
                 SelectionContainer {
                     Text(
                         text = "${state?.currentBook?.bookDescription}",
+                        color = MaterialTheme.colorScheme.secondary,
                         modifier = Modifier.padding(top = 8.dp)
                     )
                 }

@@ -31,7 +31,7 @@ data class BookEntity(
     val bookDescription: String,
 
     @ColumnInfo(name = "BookImageUrl")
-    val bookImageUrl: String,
+    val bookImageUrl: String? = null,
 
     @ColumnInfo(name = "AuthorRefId")
     val authorRefId: Int

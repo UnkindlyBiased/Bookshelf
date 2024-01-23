@@ -1,6 +1,5 @@
-package com.litekreu.bookshelf.presentation.ui_elements.elements
+package com.litekreu.bookshelf.presentation.elements
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,6 +19,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -51,14 +51,14 @@ fun ScreenTitleRow(
         IconButton(onClick = { onBack() }) {
             Icon(
                 imageVector = Icons.Default.ArrowBack,
-                tint = BookGray,
+                tint = MaterialTheme.colorScheme.onPrimaryContainer,
                 contentDescription = null
             )
         }
         Text(
             text = title,
             fontSize = 18.sp,
-            color = BookGray,
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
             modifier = Modifier
                 .align(Alignment.CenterVertically)
                 .weight(1f)
@@ -72,7 +72,11 @@ fun BookItem(
     onDelete: (BookEntity) -> Unit,
     onOpen: (BookEntity) -> Unit
 ) {
-    Card {
+    Card(
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer
+        )
+    ) {
         Box(modifier = Modifier.clickable { onOpen(book) }) {
             Row(modifier = Modifier
                 .padding(6.dp)
@@ -88,9 +92,14 @@ fun BookItem(
                     Text(
                         text = book.bookName,
                         fontWeight = FontWeight.Medium,
+                        color = MaterialTheme.colorScheme.primary,
                         style = MaterialTheme.typography.titleLarge
                     )
-                    Text(text = "Рік видавництва: ${book.bookReleaseYear}")
+                    Text(
+                        text = stringResource(R.string.book_release_year)
+                                + ": " + book.bookReleaseYear,
+                        color = MaterialTheme.colorScheme.primary
+                    )
                 }
                 IconButton(
                     onClick = { onDelete(book) },
@@ -98,6 +107,7 @@ fun BookItem(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Delete,
+                        tint = MaterialTheme.colorScheme.primary,
                         contentDescription = "Delete"
                     )
                 }
@@ -108,19 +118,21 @@ fun BookItem(
 
 @Composable
 fun InfoRow(
-    @StringRes res: Int,
+    res: String,
     info: String?,
     modifier: Modifier = Modifier,
     isDecorated: Boolean = false
 ) {
     Row {
         Text(
-            text = stringResource(res) + " ",
-            fontWeight = FontWeight.Bold
+            text = "$res ",
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.primary
         )
         Text(
             text = "$info",
             textDecoration = if (isDecorated) TextDecoration.Underline else TextDecoration.None,
+            color = MaterialTheme.colorScheme.primary,
             modifier = modifier
         )
     }
@@ -178,17 +190,18 @@ fun CommentsTitle(
         Text(
             text = stringResource(R.string.comments),
             fontFamily = googleFamily,
-            style = MaterialTheme.typography.titleLarge
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.tertiary
         )
         Text(
             text = " · ",
             style = MaterialTheme.typography.titleLarge,
-            color = BookGray
+            color = MaterialTheme.colorScheme.onTertiaryContainer
         )
         Text(
             text = "$amount",
             style = MaterialTheme.typography.titleLarge,
-            color = BookGray
+            color = MaterialTheme.colorScheme.tertiary
         )
     }
 }
@@ -201,13 +214,20 @@ fun CommentCard(
 ) {
     Card(modifier = modifier) {
         Row {
-            Text(
-                text = comment.commentText,
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(12.dp)
-                    .align(Alignment.CenterVertically)
-            )
+            Column(modifier = Modifier
+                .weight(1f)
+                .padding(12.dp)
+                .align(Alignment.CenterVertically)) {
+                Text(
+                    text = stringResource(R.string.book_progress) + ": ${comment.commentProgress}%",
+                    fontSize = 12.sp
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = comment.commentText,
+                    fontSize = 16.sp
+                )
+            }
             IconButton(
                 onClick = { onDelete() },
                 modifier = Modifier.align(Alignment.CenterVertically)
@@ -228,4 +248,16 @@ fun TextFieldPreview() {
 @Composable
 fun CommentPreview() {
     CommentCard(comment = CommentEntity(commentText = "Some textsadsadasdbsabdkjasbdkbasdbaskbdjasbdasbhldhasldhashdiashdlashidhasildhasidhiashdoiashdipashdioashidhasdhasiphdoashdipashodhasipdhasiopdhipashdipashdpas"), onDelete = { })
+}
+
+@Preview
+@Composable
+fun BookItemPreview() {
+    BookItem(book = BookEntity(
+        bookName = "TestItem",
+        bookReleaseYear = 2023,
+        bookDescription = "IDK even",
+        bookImageUrl = "",
+        authorRefId = 1
+    ), onDelete = {}, onOpen = {})
 }

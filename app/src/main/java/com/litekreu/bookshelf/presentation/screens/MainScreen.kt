@@ -1,4 +1,4 @@
-package com.litekreu.bookshelf.presentation.ui_elements.screens
+package com.litekreu.bookshelf.presentation.screens
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue

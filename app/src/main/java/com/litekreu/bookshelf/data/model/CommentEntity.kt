@@ -24,6 +24,9 @@ data class CommentEntity(
     @ColumnInfo(name = "CommentText")
     val commentText: String,
 
+    @ColumnInfo(name = "CommentProgress")
+    val commentProgress: Int = 0,
+
     @ColumnInfo(name = "BookRefId")
     val bookRefId: Int? = null
 )
