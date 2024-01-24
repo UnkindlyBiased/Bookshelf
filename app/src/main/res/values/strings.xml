@@ -5,6 +5,7 @@
     <string name="author">Автор:</string>
     <string name="book_name">Назва книги</string>
     <string name="book_desc">Опис книги</string>
+    <string name="book_state">Стан книги</string>
     <string name="book_progress">Прогрес читання книги</string>
     <string name="book_image_url">Посилання на зображення книги</string>
     <string name="book_release_year">Рік видання</string>

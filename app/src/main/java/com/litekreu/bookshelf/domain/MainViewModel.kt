@@ -1,9 +1,9 @@
 package com.litekreu.bookshelf.domain
 
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.litekreu.bookshelf.data.ShelfDatabase
-import com.litekreu.bookshelf.data.model.AuthorEntity
 import com.litekreu.bookshelf.data.model.BookEntity
 import com.litekreu.bookshelf.data.model.CommentEntity
 import com.litekreu.bookshelf.domain.event.AuthorEvent
@@ -26,8 +26,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val database: ShelfDatabase,
-    private val defaultAuthor: AuthorEntity
+    private val database: ShelfDatabase
 ) : ViewModel() {
 
     private val _booksState = MutableStateFlow(BooksState())
@@ -67,6 +66,9 @@ class MainViewModel @Inject constructor(
             bookAuthor = authors.find { author ->
                 author.authorId == state.currentBook?.authorRefId
             },
+            bookProgress = mutableFloatStateOf(
+                getProgressFromComments(comments)
+            ),
             currentComments = comments.filter { comment ->
                 comment.bookRefId == state.currentBook?.id
             }.sortedBy { it.commentProgress }.reversed()
@@ -95,18 +97,14 @@ class MainViewModel @Inject constructor(
     fun onBookEvent(event: BookEvent) {
         when(event) {
             is BookEvent.AddBook -> {
-                viewModelScope.launch {
-                    try {
-                        database.booksDao.insertBook(BookEntity(
-                            bookName = event.title,
-                            bookDescription = event.description,
-                            bookReleaseYear = event.releaseYear,
-                            bookImageUrl = event.imageLink,
-                            authorRefId = event.authorId
-                        ))
-                    } catch (e: Exception) {
-                        database.authorsDao.insertAuthor(defaultAuthor)
-                    }
+                viewModelScope.launch(Dispatchers.IO) {
+                    database.booksDao.insertBook(BookEntity(
+                        bookName = event.title,
+                        bookDescription = event.description,
+                        bookReleaseYear = event.releaseYear,
+                        bookImageUrl = event.imageLink,
+                        authorRefId = event.authorId
+                    ))
                 }
             }
             is BookEvent.DeleteBook -> {
@@ -118,7 +116,10 @@ class MainViewModel @Inject constructor(
                 viewModelScope.launch(Dispatchers.IO) {
                     _currentBookState.update { bookState ->
                         bookState.copy(
-                            currentBook = event.book
+                            currentBook = event.book,
+                            bookProgress = mutableFloatStateOf(
+                                getProgressFromComments(bookState.currentComments)
+                            )
                         )
                     }
                 }
@@ -128,9 +129,10 @@ class MainViewModel @Inject constructor(
     fun onCommentsEvent(event: CommentEvent) {
         when(event) {
             is CommentEvent.AddComment -> {
-                viewModelScope.launch {
+                viewModelScope.launch(Dispatchers.IO) {
                     database.commentsDao.insertComment(CommentEntity(
                         commentText = event.commentText.replace("\\s+".toRegex(), " "),
+                        commentProgress = currentBookState.value.bookProgress.floatValue.toInt(),
                         bookRefId = currentBookState.value.currentBook?.id
                     ))
                 }
@@ -142,6 +144,9 @@ class MainViewModel @Inject constructor(
             }
         }
     }
+
+    private fun getProgressFromComments(comments: List<CommentEntity>) : Float =
+        comments.maxOfOrNull { it.commentProgress }?.toFloat() ?: 0f
 
     private companion object {
         private const val TIMEOUT: Long = 3000

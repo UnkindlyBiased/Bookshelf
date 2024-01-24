@@ -127,12 +127,12 @@ fun InfoRow(
         Text(
             text = "$res ",
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.primary
+            color = MaterialTheme.colorScheme.onPrimaryContainer
         )
         Text(
             text = "$info",
             textDecoration = if (isDecorated) TextDecoration.Underline else TextDecoration.None,
-            color = MaterialTheme.colorScheme.primary,
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
             modifier = modifier
         )
     }
@@ -163,7 +163,10 @@ fun CommentTextField(
                             contentDescription = null
                         )
                         Spacer(modifier = Modifier.width(4.dp))
-                        innerTextField()
+                        innerTextField().apply {
+                            this
+                            Spacer(modifier = Modifier.height(20.dp))
+                        }
                     }
                 }
             },
@@ -183,7 +186,6 @@ fun CommentsTitle(
     onClick: () -> Unit
 ) {
     Row(modifier = Modifier
-        .padding(top = 18.dp)
         .clickable {
             onClick()
         }) {
@@ -191,7 +193,7 @@ fun CommentsTitle(
             text = stringResource(R.string.comments),
             fontFamily = googleFamily,
             style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.tertiary
+            color = MaterialTheme.colorScheme.onPrimaryContainer
         )
         Text(
             text = " · ",
@@ -201,7 +203,7 @@ fun CommentsTitle(
         Text(
             text = "$amount",
             style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.tertiary
+            color = MaterialTheme.colorScheme.onPrimaryContainer
         )
     }
 }

@@ -1,6 +1,8 @@
 package com.litekreu.bookshelf.presentation.screens
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,7 +14,9 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
@@ -24,6 +28,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
@@ -51,10 +57,10 @@ import com.litekreu.bookshelf.presentation.elements.CommentTextField
 import com.litekreu.bookshelf.presentation.elements.CommentsTitle
 import com.litekreu.bookshelf.presentation.elements.InfoRow
 import com.litekreu.bookshelf.presentation.elements.ScreenTitleRow
-import com.litekreu.bookshelf.ui.theme.googleFamily
+import com.litekreu.bookshelf.util.StyleDimensions
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun CurrentBookScreen(
     state: CurrentBookState?,
@@ -108,8 +114,12 @@ fun CurrentBookScreen(
                                     IconButton(
                                         onClick = { state.commentText.value.also {
                                             if (it.isNotBlank()) {
-                                                onComment(CommentEvent.AddComment(it))
+                                                onComment(CommentEvent.AddComment(
+                                                    commentText = it,
+                                                    bookProgress = state.bookProgress.floatValue.toInt()
+                                                ))
                                             }
+                                            state.commentText.value = ""
                                         } },
                                         modifier = Modifier
                                             .weight(1f)
@@ -155,8 +165,8 @@ fun CurrentBookScreen(
             }
         }
     }
-    LazyColumn {
-        item {
+    Scaffold(
+        topBar = {
             Row {
                 state?.currentBook?.bookName?.let {
                     ScreenTitleRow(
@@ -179,8 +189,16 @@ fun CurrentBookScreen(
                 }
             }
         }
-        item {
-            Row(modifier = Modifier.padding(top = 16.dp, start = 16.dp)) {
+    ) { padding ->
+        Column(
+            modifier = Modifier.padding(
+                top = padding.calculateTopPadding()
+            )
+        ) {
+            Spacer(modifier = Modifier.height(16.dp))
+            Row(
+                modifier = Modifier.padding(StyleDimensions.HorizontalPadding)
+            ) {
                 state?.currentBook?.let {
                     AsyncImage(
                         model = it.bookImageUrl,
@@ -196,7 +214,8 @@ fun CurrentBookScreen(
                             text = it.bookName,
                             fontSize = 28.sp,
                             fontWeight = FontWeight.Medium,
-                            color = MaterialTheme.colorScheme.primary
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.basicMarquee()
                         )
                         Column(modifier = Modifier.padding(top = 14.dp)) {
                             InfoRow(res = stringResource(R.string.book_release_year) + ":", info = "${it.bookReleaseYear}")
@@ -212,22 +231,45 @@ fun CurrentBookScreen(
                     }
                 }
             }
-        }
-        item {
-            Column(modifier = Modifier.padding(16.dp)) {
+            Spacer(modifier = Modifier.height(8.dp))
+            LazyRow(
+                contentPadding = PaddingValues(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                item {
+                    Text(
+                        text = stringResource(R.string.book_state),
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                }
+                items(listOf("Прочитав", "Читаю", "Прочитаю", "Улюблене")) { book ->
+                    OutlinedButton(
+                        onClick = { /*TODO*/ },
+                        modifier = Modifier.widthIn(0.dp, 120.dp)
+                    ) {
+                        Text(text = book)
+                    }
+                }
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            Column(
+                modifier = Modifier.padding(StyleDimensions.HorizontalPadding)
+            ) {
                 Text(
                     text = stringResource(R.string.book_desc),
-                    fontFamily = googleFamily,
                     style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.secondary
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
                 SelectionContainer {
                     Text(
                         text = "${state?.currentBook?.bookDescription}",
-                        color = MaterialTheme.colorScheme.secondary,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
                         modifier = Modifier.padding(top = 8.dp)
                     )
                 }
+                Spacer(modifier = Modifier.height(16.dp))
                 Row {
                     CommentsTitle(amount = state?.currentComments?.size) {
                         scope.launch {
@@ -239,7 +281,7 @@ fun CurrentBookScreen(
                         text = stringResource(R.string.beta_comments_box),
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.outline,
-                        modifier = Modifier.padding(top = 24.dp)
+                        modifier = Modifier.align(Alignment.CenterVertically)
                     )
                 }
             }
